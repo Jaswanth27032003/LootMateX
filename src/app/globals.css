@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by a `.dark` class on <html> (set before paint in layout.tsx). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+   THEME TOKENS
+   To change the accent color, edit --accent / --accent-hover in both
+   blocks below — every CTA, link and active state reads from them.
+   ------------------------------------------------------------------ */
+:root {
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+
+  --bg: #fafaf9;
+  --band: #f5f5f4; /* alternating section background */
+  --surface: #ffffff; /* cards, header, footer */
+  --field: #f5f5f4; /* search input */
+  --media: #f1f5f9; /* image placeholder */
+  --border: #e7e5e4;
+  --fg: #0f172a;
+  --fg-muted: #64748b;
+  --fg-faint: #94a3b8;
+  --nav: #334155;
+  --deal: #0f172a;
+  --deal-fg: #ffffff;
+  --card-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+
+  color-scheme: light;
+}
+
+.dark {
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+
+  --bg: #0a0a0a;
+  --band: #111111;
+  --surface: #141414;
+  --field: #1a1a1a;
+  --media: #1f1f1f;
+  --border: #262626;
+  --fg: #e5e5e5;
+  --fg-muted: #a3a3a3;
+  --fg-faint: #6b6b6b;
+  --nav: #a3a3a3;
+  --deal: #e5e5e5;
+  --deal-fg: #0a0a0a;
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-bg: var(--bg);
+  --color-band: var(--band);
+  --color-surface: var(--surface);
+  --color-field: var(--field);
+  --color-media: var(--media);
+  --color-border: var(--border);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-nav: var(--nav);
+  --color-deal: var(--deal);
+  --color-deal-fg: var(--deal-fg);
+
+  --radius-card: 16px;
+  --radius-control: 10px;
+  --shadow-card: var(--card-shadow);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
