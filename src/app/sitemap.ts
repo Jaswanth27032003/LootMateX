@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { categories } from "@/data/products";
 import { site } from "@/lib/site";
+import { isPublishedProduct } from "@/lib/products";
 
 export const dynamic = "force-static";
 
@@ -13,6 +14,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "weekly" as const,
       priority: 0.8,
+    })),
+    ...categories.flatMap((category) => category.products.filter(isPublishedProduct)).map((product) => ({
+      url: `${site.url}/products/${product.id}`,
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
     })),
   ];
 }

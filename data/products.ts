@@ -8,18 +8,19 @@
  *   "/images/<category>/<file>.jpg". If the file isn't there yet, the card
  *   shows a neutral placeholder block instead.
  * - `keySpecs`: 4–6 plain-language specs, in the order you want them shown.
- *   The first 3 also appear as chips on the card; all of them appear under
- *   "See specs".
+ *   Cards highlight screen size, refresh rate and panel type when available;
+ *   all specifications appear on product detail and comparison views.
  * - `category` must match the category the product is listed under (the build
  *   fails with a clear message if it doesn't).
- * - `tags` decide which sub-sections a product appears in on its category page
- *   (see data/sections.ts). Leave `tags: {}` if a category has no sub-sections yet.
+ * - `tags` drive the filters on each category page (see data/sections.ts).
+ *   Leave `tags: {}` if a category has no filters yet.
+ * - Draft IDs starting with `placeholder-` and example.com links stay hidden.
  */
 
 export type KeySpec = { label: string; value: string };
 
 /** Add a new id here when you add a category below. */
-export type CategoryId = "monitors" | "laptops" | "gpus" | "accessories" | "helmets";
+export type CategoryId = "monitors" | "laptops" | "gpus" | "desktops" | "accessories" | "helmets";
 
 export type MonitorForm = "flat" | "curved" | "ultrawide" | "super-ultrawide";
 
@@ -46,6 +47,14 @@ export type Product = {
   affiliateUrl: string;
   rel: "nofollow sponsored noopener";
   tags: ProductTags;
+  /** Optional editorial context. Only add claims supported by the listed specs. */
+  badge?: string;
+  bestFor?: string;
+  benefits?: string[];
+  considerations?: string[];
+  merchant?: string;
+  /** Extra local product photos; the main image is included automatically. */
+  gallery?: string[];
 };
 
 export type Category = {
@@ -69,6 +78,23 @@ export const categories: Category[] = [
         shortDescription: "A big curved screen with fast 165Hz refresh for smooth, immersive gaming.",
         price: "₹30,799",
         image: "/images/monitors/samsung-odyssey-g5.jpg",
+        badge: "Ultrawide gaming",
+        bestFor: "A wider view for your gaming setup",
+        merchant: "Flipkart",
+        gallery: [
+          "/images/monitors/samsung-odyssey-g5-side.webp",
+          "/images/monitors/samsung-odyssey-g5-top.webp",
+        ],
+        benefits: [
+          "A 34-inch curved, ultrawide screen gives games and multiple windows more room.",
+          "The listed 165 Hz refresh rate suits a setup focused on fluid motion.",
+          "3440 × 1440 resolution gives you more horizontal workspace than a standard 2560 × 1440 display.",
+        ],
+        considerations: [
+          "Measure your desk before choosing a 34-inch ultrawide screen.",
+          "Check your graphics card and connection can support the resolution and refresh rate you want.",
+          "The listed 1 ms response time is a specification, not a result from our own testing.",
+        ],
         keySpecs: [
           { label: "Screen Size", value: "34 inch (Curved)" },
           { label: "Resolution", value: "WQHD (3440 x 1440)" },
@@ -88,6 +114,19 @@ export const categories: Category[] = [
         shortDescription: "A comfortable everyday monitor with eye-care features and built-in speakers.",
         price: "₹10,650",
         image: "/images/monitors/benq-gw2790.jpg",
+        badge: "Everyday workspace",
+        bestFor: "Work, browsing, and a simpler desk",
+        merchant: "Amazon",
+        benefits: [
+          "A 27-inch flat IPS display gives everyday work a straightforward, spacious canvas.",
+          "The listed 100 Hz refresh rate offers a step up from a 60 Hz screen.",
+          "Built-in speakers let you keep basic audio on the desk without a separate speaker set.",
+        ],
+        considerations: [
+          "Full HD at 27 inches has less pixel density than a same-size QHD display.",
+          "100 Hz sits below the 165 Hz option in this collection if high refresh gaming is your priority.",
+          "Check the retailer for the exact ports, stand adjustments, and warranty before buying.",
+        ],
         keySpecs: [
           { label: "Screen Size", value: "27 inch" },
           { label: "Resolution", value: "Full HD (1920 x 1080)" },
@@ -107,6 +146,23 @@ export const categories: Category[] = [
         shortDescription: "An affordable curved monitor for everyday work, browsing, and casual use.",
         price: "₹4,498",
         image: "/images/monitors/samsung-lc27r500.jpg",
+        badge: "Curved everyday pick",
+        bestFor: "Everyday work with a curved screen",
+        merchant: "Amazon",
+        gallery: [
+          "/images/monitors/samsung-lc27r500-side.jpg",
+          "/images/monitors/samsung-lc27r500-angle.jpg",
+        ],
+        benefits: [
+          "A 27-inch curved screen is an option for a more wraparound desk view.",
+          "The listed Full HD resolution and 60 Hz refresh rate suit browsing and everyday office use.",
+          "A VA panel offers a different panel choice from the flat IPS model in this collection.",
+        ],
+        considerations: [
+          "60 Hz is the lowest refresh rate in this collection; consider the faster options for gaming.",
+          "Full HD at 27 inches offers less pixel density than a same-size QHD screen.",
+          "Check the retailer's final price, condition, and availability before making a decision.",
+        ],
         keySpecs: [
           { label: "Screen Size", value: "27 inch (Curved)" },
           { label: "Resolution", value: "Full HD (1920 x 1080)" },
@@ -123,8 +179,8 @@ export const categories: Category[] = [
   },
 
   // ---------------------------------------------------------------------------
-  // PLACEHOLDER CATEGORIES — dummy entries so the layout is visible.
-  // Replace each `products` array with real products.
+  // DRAFT PRODUCTS — retained as editing examples, excluded from the public catalog.
+  // Replace each `products` array with real products and working affiliate links.
   // ---------------------------------------------------------------------------
   {
     id: "laptops",
@@ -209,8 +265,14 @@ export const categories: Category[] = [
     ],
   },
   {
+    id: "desktops",
+    name: "Desktops",
+    description: "A home for your next complete setup.",
+    products: [],
+  },
+  {
     id: "accessories",
-    name: "Accessories",
+    name: "Desk gadgets",
     description: "The small upgrades that change everything.",
     products: [
       {

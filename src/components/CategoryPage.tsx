@@ -1,108 +1,101 @@
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
 import type { SectionGroup } from "@/data/sections";
-import type { CatalogCategory, CatalogProduct } from "@/lib/catalog";
+import type { CatalogCategory } from "@/lib/catalog";
 import { hasTag, matchesQuery, queryTerms } from "@/lib/search";
 import { useCatalog } from "./CatalogProvider";
+import { CatalogToolbar, sortProducts, type CatalogSort } from "./CatalogToolbar";
 import { ProductGrid } from "./ProductGrid";
-import { SubNav } from "./SubNav";
 
-type Props = {
-  category: CatalogCategory;
-  /** Sub-section groups from data/sections.ts; omitted → one grid of all products. */
-  groups?: SectionGroup[];
-};
+type Props = { category: CatalogCategory; groups?: SectionGroup[] };
 
-const container = "mx-auto max-w-[1440px] px-4 sm:px-8 lg:px-20";
-// Clears the sticky header + jump-link bar when jumping to an anchor.
-const anchorOffset = "scroll-mt-32 lg:scroll-mt-36";
-
-export function CategoryPage({ category, groups }: Props) {
+export function CategoryPage({ category, groups = [] }: Props) {
   const { query, setQuery } = useCatalog();
+  const [sort, setSort] = useState<CatalogSort>("recommended");
+  const [facets, setFacets] = useState<Record<string, string>>({});
   const terms = queryTerms(query);
-  const products = category.products.filter((p) => matchesQuery(p, terms, category.name));
+  const availableGroups = groups.map((group) => ({
+    ...group,
+    sections: group.sections.filter((section) => category.products.some((product) => hasTag(product, section.tag, section.value))),
+  })).filter((group) => group.sections.length > 0);
+  const selectedSections = availableGroups.flatMap((group) => group.sections.filter((section) => section.id === facets[`${category.id}:${group.id}`]));
+  const products = sortProducts(category.products.filter((product) => matchesQuery(product, terms, category.name) && selectedSections.every((section) => hasTag(product, section.tag, section.value))), sort);
+  const hasFilters = Boolean(query.trim()) || selectedSections.length > 0 || sort !== "recommended";
 
-  // Keep only sections with matching products, and groups with at least one section.
-  const visibleGroups = (groups ?? [])
-    .map((g) => ({
-      ...g,
-      sections: g.sections
-        .map((s) => ({ ...s, products: products.filter((p) => hasTag(p, s.tag, s.value)) }))
-        .filter((s) => s.products.length > 0),
-    }))
-    .filter((g) => g.sections.length > 0);
-
-  const count = category.products.length;
+  function clearFilters() {
+    setQuery("");
+    setFacets({});
+    setSort("recommended");
+  }
 
   return (
-    <>
-      <div className={`${container} flex flex-col gap-3 pb-10 pt-12 lg:pb-12 lg:pt-16`}>
-        <span className="text-xs font-bold uppercase tracking-[0.08em] text-accent">
-          {count} {count === 1 ? "pick" : "picks"}
-        </span>
-        <h1 className="text-4xl font-extrabold leading-[1.08] tracking-[-0.02em] lg:text-5xl">{category.name}</h1>
-        <p className="max-w-[560px] text-base leading-relaxed text-fg-muted">{category.description}</p>
-      </div>
+    <div className="site-container pb-20 pt-8 sm:pt-10">
+      <nav aria-label="Breadcrumb" className="mb-10 flex items-center gap-2 text-xs text-fg-muted">
+        <Link href="/" className="transition-colors hover:text-accent">Home</Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page" className="text-fg">{category.name}</span>
+      </nav>
 
-      {visibleGroups.length > 0 && <SubNav links={visibleGroups.map(({ id, title }) => ({ id, title }))} />}
+      <header className="mb-10 flex flex-col justify-between gap-5 border-b border-border pb-10 md:flex-row md:items-end">
+        <div>
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-accent">The {category.name.toLowerCase()} edit</p>
+          <h1 className="text-[40px] font-bold leading-[1.1] tracking-[-0.04em] sm:text-[52px]">{category.name}</h1>
+          <p className="mt-4 max-w-[560px] text-base leading-7 text-fg-muted">{category.description}</p>
+        </div>
+        <p className="text-sm text-fg-muted"><span className="font-semibold text-fg">{category.products.length}</span> {category.products.length === 1 ? "pick" : "picks"} in the collection</p>
+      </header>
 
-      <div id="catalog" className={anchorOffset}>
-        {groups
-          ? visibleGroups.map((g, i) => (
-              <section
-                key={g.id}
-                id={g.id}
-                aria-labelledby={`${g.id}-heading`}
-                className={`${anchorOffset} ${i % 2 === 0 ? "bg-band" : ""}`}
-              >
-                <div className={`${container} flex flex-col gap-12 py-12 lg:py-14`}>
-                  <h2 id={`${g.id}-heading`} className="text-2xl font-bold tracking-[-0.01em] lg:text-[26px]">
-                    {g.title}
-                  </h2>
-                  {g.sections.map((s) => (
-                    <SubSection key={s.id} id={s.id} title={s.title} description={s.description} products={s.products} />
-                  ))}
-                </div>
-              </section>
-            ))
-          : products.length > 0 && (
-              <section aria-label={`All ${category.name}`} className="bg-band">
-                <div className={`${container} py-12 lg:py-14`}>
-                  <ProductGrid products={products} />
-                </div>
-              </section>
+      {category.products.length > 0 ? (
+        <section id="catalog" aria-label={`${category.name} collection`} className="scroll-mt-24">
+          {availableGroups.length > 0 && (
+            <div className="mb-6 grid grid-cols-1 gap-4 rounded-2xl border border-border bg-surface p-5 sm:grid-cols-2 xl:grid-cols-4">
+              {availableGroups.map((group) => (
+                <label key={group.id} className="flex min-w-0 flex-col gap-2 text-xs font-semibold text-fg-muted">
+                  {group.title.replace(/^By /, "")}
+                  <select
+                    value={facets[`${category.id}:${group.id}`] ?? ""}
+                    onChange={(event) => setFacets((current) => ({ ...current, [`${category.id}:${group.id}`]: event.target.value }))}
+                    className="h-11 w-full cursor-pointer rounded-lg border border-border bg-field px-3 text-[13px] font-medium text-fg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+                  >
+                    <option value="">All options</option>
+                    {group.sections.map((section) => <option key={section.id} value={section.id}>{section.title.replace(/ Monitors$/, "")}</option>)}
+                  </select>
+                </label>
+              ))}
+            </div>
+          )}
+
+          <CatalogToolbar count={products.length} sort={sort} onSortChange={setSort} hasFilters={hasFilters} onClear={clearFilters} placeholder={`Search ${category.name.toLowerCase()}, brands or specs…`} />
+
+          {selectedSections.length > 0 && (
+            <div className="mt-5 flex flex-wrap gap-2" aria-label="Active filters">
+              {selectedSections.map((section) => <span key={section.id} className="rounded-full bg-accent/8 px-3 py-1.5 text-xs font-medium text-accent">{section.title}</span>)}
+            </div>
+          )}
+
+          <div className="mt-7">
+            {products.length > 0 ? <ProductGrid products={products} /> : (
+              <div className="rounded-2xl border border-dashed border-border bg-surface px-6 py-16 text-center">
+                <h2 className="text-xl font-semibold tracking-tight">No picks match those filters.</h2>
+                <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-fg-muted">Try a different combination or clear the filters to explore every {category.name.toLowerCase()} pick.</p>
+                <button type="button" onClick={clearFilters} className="mt-6 cursor-pointer rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-white hover:bg-accent-hover">Clear filters</button>
+              </div>
             )}
-
-        {products.length === 0 && (
-          <div className={`${container} flex flex-col items-center gap-3 py-24 text-center`} role="status">
-            <p className="text-lg font-bold">
-              No {category.name} match “{query}”.
-            </p>
-            <p className="text-sm text-fg-muted">Try a different search.</p>
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              className="mt-2 cursor-pointer rounded-control border border-border bg-surface px-4 py-2 text-sm font-semibold text-accent hover:text-accent-hover"
-            >
-              Clear search
-            </button>
           </div>
-        )}
-      </div>
-    </>
-  );
-}
-
-function SubSection(props: { id: string; title: string; description: string; products: CatalogProduct[] }) {
-  return (
-    <div id={props.id} aria-labelledby={`${props.id}-heading`} role="region" className={`flex flex-col gap-5 ${anchorOffset}`}>
-      <div>
-        <h3 id={`${props.id}-heading`} className="mb-1 text-lg font-bold tracking-[-0.01em]">
-          {props.title}
-        </h3>
-        <p className="text-sm text-fg-muted">{props.description}</p>
-      </div>
-      <ProductGrid products={props.products} />
+          {products.length > 0 && <p className="mt-6 text-xs leading-6 text-fg-muted">Affiliate links may earn us a commission at no extra cost to you. Listed prices may change; check the retailer for current pricing and availability.</p>}
+        </section>
+      ) : (
+        <div className="flex flex-col items-center rounded-2xl border border-dashed border-border bg-surface px-6 py-20 text-center">
+          <span className="mb-5 inline-flex size-14 items-center justify-center rounded-2xl bg-accent/8 text-accent" aria-hidden="true">
+            <svg className="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="M3 8v9l9 5 9-5V8M12 13v9" /></svg>
+          </span>
+          <h2 className="text-2xl font-semibold tracking-tight">This collection is taking shape.</h2>
+          <p className="mt-3 max-w-md text-sm leading-6 text-fg-muted">There are no published {category.name.toLowerCase()} picks yet. In the meantime, discover the gear already in our shortlist.</p>
+          <Link href="/#catalog" onClick={clearFilters} className="mt-6 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover">Explore current picks <span aria-hidden="true">→</span></Link>
+        </div>
+      )}
     </div>
   );
 }

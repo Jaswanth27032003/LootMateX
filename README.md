@@ -14,6 +14,16 @@ Environment variables are listed in `.env.example`. All are optional: `NEXT_PUBL
 - Category page sub-sections: `data/sections.ts`
 - Product images: `public/images/<category>/`
 
+## Shopping experience
+
+The homepage includes an interactive featured-product spotlight, category links, product search, and price sorting. Category pages use specification filters above one product grid. Product pages at `/products/<id>` include galleries, complete specifications, benefits, trade-offs, and the original tracked affiliate links. Visitors can compare up to three products; selections are stored locally in their browser.
+
+Draft entries whose IDs start with `placeholder-`, or whose affiliate links point to `example.com`, remain in the source as editing examples but are excluded from the public catalog, product routes, and product sitemap entries. Empty categories show a coming-soon state. Desktops is ready for real listings, and the existing `/accessories` route is displayed as Desk gadgets.
+
+Optional product fields `badge`, `bestFor`, `benefits`, `considerations`, `merchant`, and `gallery` control the expanded detail experience. Use existing, verified product information when filling these fields. Listed prices are reference values rather than a live price feed.
+
+The design uses the existing Next.js/React/Tailwind stack and local product assets, with no additional dependencies. Both themes, visible keyboard focus, a skip link, native comparison dialogs, and reduced-motion preferences are supported.
+
 ## Analytics (Google Analytics 4)
 
 The site can send traffic data to your own Google Analytics 4 property. This is send-only: nothing about analytics is shown on the site, and there is no dashboard in this codebase. When no measurement ID is set, the Google script is never loaded and nothing is sent.

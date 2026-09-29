@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import type { Category, Product } from "@/data/products";
+import { isPublishedProduct } from "@/lib/products";
 
 export type CatalogProduct = Product & { hasImage: boolean };
 export type CatalogCategory = Omit<Category, "products"> & { products: CatalogProduct[] };
@@ -19,11 +20,11 @@ function imageExists(src: string) {
 export function buildCatalog(categories: Category[]): CatalogCategory[] {
   return categories.map((c) => ({
     ...c,
-    products: c.products.map((p) => {
+    products: c.products.filter(isPublishedProduct).map((p) => {
       if (p.category !== c.id) {
         throw new Error(`Product "${p.id}" has category "${p.category}" but is listed under "${c.id}" in data/products.ts`);
       }
-      return { ...p, hasImage: imageExists(p.image) };
+      return { ...p, gallery: p.gallery?.filter(imageExists), hasImage: imageExists(p.image) };
     }),
   }));
 }

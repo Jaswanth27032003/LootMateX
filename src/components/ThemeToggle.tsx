@@ -1,10 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export function ThemeToggle() {
+  const [dark, setDark] = useState(false);
+  useEffect(() => setDark(document.documentElement.classList.contains("dark")), []);
   function toggle() {
     const root = document.documentElement;
     const next = root.classList.contains("dark") ? "light" : "dark";
     root.classList.toggle("dark", next === "dark");
+    setDark(next === "dark");
     try {
       localStorage.setItem("theme", next);
     } catch {
@@ -18,6 +23,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle dark theme"
+      aria-pressed={dark}
       className="flex size-[38px] shrink-0 cursor-pointer items-center justify-center rounded-control border border-border bg-surface text-nav transition-colors hover:text-fg"
     >
       <svg className="size-[18px] dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

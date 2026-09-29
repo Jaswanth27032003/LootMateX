@@ -1,10 +1,5 @@
 import Link from "next/link";
 
 export function Logo() {
-  return (
-    <Link href="/" className="flex items-center gap-2 text-fg" aria-label="LootMateX home">
-      <span className="size-2.5 rounded-[3px] bg-accent" aria-hidden />
-      <span className="text-xl font-extrabold tracking-[-0.02em]">LootMateX</span>
-    </Link>
-  );
+  return <Link href="/" className="site-logo" aria-label="LootMateX home"><span className="logo-mark" aria-hidden><svg width="18" height="20" viewBox="0 0 18 20" fill="none"><path d="m10 1-8 11h6l-1 7 9-11h-6l1-7Z" fill="currentColor" /></svg></span><span>LootMate<span className="text-accent">X</span></span></Link>;
 }

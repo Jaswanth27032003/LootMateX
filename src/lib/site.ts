@@ -19,7 +19,7 @@ export const site = {
   name: "LootMateX",
   title: "LootMateX — The best tech gear, hand-picked for you",
   description:
-    "Monitors, laptops, GPUs, accessories and helmets — the trending picks actually worth buying, updated every week.",
+    "Discover hand-picked monitors and explore laptops, GPUs, desktops, desk gadgets and more. Compare useful specifications and find your next setup upgrade.",
   url: resolveSiteUrl().replace(/\/$/, ""),
   twitterHandle: "@lootmatex",
   xUrl: "https://x.com/lootmatex",

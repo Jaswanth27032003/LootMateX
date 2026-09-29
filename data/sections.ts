@@ -53,7 +53,7 @@ export const categorySections: Partial<Record<CategoryId, SectionGroup[]>> = {
       sections: [
         { id: "hd", title: "HD (1280×720)", description: "Basic sharpness — fine for small screens and tight budgets.", tag: "resolutionTier", value: "hd" },
         { id: "fhd", title: "Full HD / 1080p (1920×1080)", description: "The everyday standard — sharp enough for most people on screens up to 27 inches.", tag: "resolutionTier", value: "fhd" },
-        { id: "qhd", title: "QHD / 2K (2560×1440)", description: "Noticeably crisper than Full HD — the sweet spot for 27-inch and wider screens.", tag: "resolutionTier", value: "qhd" },
+        { id: "qhd", title: "QHD / WQHD (1440p)", description: "1440-pixel-high displays, including standard and ultrawide formats. Check each product for its exact resolution.", tag: "resolutionTier", value: "qhd" },
         { id: "uhd4k", title: "4K UHD (3840×2160)", description: "Very sharp detail — great for big screens, photos, and movies.", tag: "resolutionTier", value: "uhd4k" },
         { id: "5k", title: "5K (5120×2880)", description: "Extra-fine detail for designers and photo editors.", tag: "resolutionTier", value: "5k" },
         { id: "6k", title: "6K (6016×3384)", description: "Professional-grade sharpness for high-end creative work.", tag: "resolutionTier", value: "6k" },

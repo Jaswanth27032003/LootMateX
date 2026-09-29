@@ -1,50 +1,16 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useCatalog } from "./CatalogProvider";
+import { Icon } from "./Icon";
 
 export function SearchInput() {
   const { query, setQuery } = useCatalog();
-
-  function onChange(value: string) {
-    // When a search starts, bring the results into view.
-    if (!query && value) document.getElementById("catalog")?.scrollIntoView({ block: "start" });
-    setQuery(value);
-  }
-
-  return (
-    <form
-      role="search"
-      onSubmit={(e) => e.preventDefault()}
-      className="flex min-w-0 flex-1 items-center gap-2 rounded-control border border-border bg-field px-3.5 py-[9px] transition-colors focus-within:border-accent lg:w-60 lg:flex-none"
-    >
-      <svg className="size-4 shrink-0 text-fg-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
-        <circle cx="11" cy="11" r="7" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      </svg>
-      <label htmlFor="site-search" className="sr-only">
-        Search products
-      </label>
-      <input
-        id="site-search"
-        type="search"
-        value={query}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Search products..."
-        autoComplete="off"
-        className="w-full min-w-0 bg-transparent text-[13px] text-fg outline-none placeholder:text-fg-faint [&::-webkit-search-cancel-button]:hidden"
-      />
-      {query && (
-        <button
-          type="button"
-          onClick={() => setQuery("")}
-          aria-label="Clear search"
-          className="shrink-0 cursor-pointer text-fg-faint hover:text-fg"
-        >
-          <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden>
-            <path d="M18 6 6 18M6 6l12 12" />
-          </svg>
-        </button>
-      )}
-    </form>
-  );
+  const router = useRouter();
+  return <form role="search" className="header-search-form" onSubmit={e => { e.preventDefault(); const catalog = document.getElementById("catalog"); if (catalog) catalog.scrollIntoView({ block: "start" }); else router.push(`/?q=${encodeURIComponent(query)}#catalog`); }}>
+    <Icon name="search" size={20} /><label htmlFor="site-search" className="sr-only">Search products</label>
+    <input id="site-search" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search a product, spec, or category…" autoComplete="off" />
+    {query && <button type="button" className="icon-button" onClick={() => setQuery("")} aria-label="Clear search"><Icon name="close" size={16} /></button>}
+    <button type="submit" className="button-primary">Search <Icon name="arrow-right" size={16} /></button>
+  </form>;
 }

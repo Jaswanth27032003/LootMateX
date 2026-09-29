@@ -1,25 +1,42 @@
-import { categories } from "@/data/products";
+"use client";
 
-export function Hero() {
-  return (
-    <section className="mx-auto flex max-w-[1440px] flex-col items-center gap-5 px-4 pb-16 pt-16 text-center sm:px-8 sm:pt-20 lg:px-20 lg:pb-20 lg:pt-24">
-      <span className="text-xs font-bold uppercase tracking-[0.08em] text-accent">Trending tech, curated daily</span>
-      <h1 className="max-w-[760px] text-4xl font-extrabold leading-[1.08] tracking-[-0.02em] sm:text-5xl lg:text-[56px]">
-        The best tech gear, hand-picked for you.
-      </h1>
-      <p className="max-w-[560px] text-base leading-relaxed text-fg-muted sm:text-[17px]">
-        Monitors, laptops, GPUs, accessories and helmets — the trending picks actually worth buying, updated every week.
-      </p>
-      <a
-        href={`#${categories[0]?.id ?? ""}`}
-        className="mt-3 inline-flex items-center gap-2 rounded-control bg-accent px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
-      >
-        Browse the picks
-        <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-          <line x1="12" y1="5" x2="12" y2="19" />
-          <polyline points="19 12 12 19 5 12" />
-        </svg>
-      </a>
-    </section>
-  );
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import type { CatalogProduct } from "@/lib/catalog";
+import { Icon } from "./Icon";
+
+export function Hero({ products }: { products: CatalogProduct[] }) {
+  const [selected, setSelected] = useState(0);
+  const product = products[selected];
+  if (!product) return null;
+  const titles = ["A wider world.\nA better setup.", "Room to focus.\nSpace to create.", "A fresh curve.\nAn everyday upgrade."];
+
+  return <section className="hero-section">
+    <div className="site-container hero-layout">
+      <div className="hero-copy">
+        <span className="eyebrow"><span className="status-dot" /> GOOD TECH. GREAT FINDS.</span>
+        <h1>Your next<br />upgrade starts <span className="hero-italic">here.</span></h1>
+        <p>Less searching. Better gear. Explore hand-picked tech, get to know the details, and find what fits your setup.</p>
+        <div className="hero-actions">
+          <a className="button-primary" href="#catalog">Explore the picks <Icon name="arrow-right" size={18} /></a>
+          <a className="text-link" href="#how-we-pick">How we pick <span aria-hidden>↗</span></a>
+        </div>
+        <div className="hero-footnote"><span className="mini-icon"><Icon name="check" size={15} /></span> Curated finds <span className="footnote-dot">·</span> Details that matter</div>
+      </div>
+      <div className="hero-showcase">
+        <div className="showcase-top"><span><Icon name="sparkle" size={14} /> IN THE SPOTLIGHT</span><span className="showcase-number">0{selected + 1} / 0{products.length}</span></div>
+        <div className="showcase-heading">{(titles[selected] ?? product.name).split("\n").map((line, i) => <span key={i}>{line}<br /></span>)}</div>
+        <Link href={`/products/${product.id}`} className="showcase-image" aria-label={`Explore ${product.name}`}>
+          <div className="showcase-orbit" aria-hidden />
+          <Image key={product.id} src={product.image} alt={product.name} width={600} height={350} loading={selected === 0 ? "eager" : "lazy"} className="spotlight-image" sizes="(min-width: 1024px) 540px, 90vw" />
+          <span className="showcase-image-link"><Icon name="arrow-up-right" size={20} /></span>
+        </Link>
+        <div className="showcase-bottom">
+          <div><span className="showcase-product-name">{product.name.split(' 34"')[0].split(' 27"')[0]}</span><span className="showcase-product-spec">{product.keySpecs.find(s => s.label === "Refresh Rate")?.value} <span>·</span> {product.keySpecs.find(s => s.label === "Panel Type")?.value} panel</span></div>
+          <div className="showcase-dots" role="group" aria-label="Featured products">{products.map((p, i) => <button key={p.id} type="button" onClick={() => setSelected(i)} aria-label={`Feature ${p.name}`} aria-pressed={selected === i}><span /></button>)}</div>
+        </div>
+      </div>
+    </div>
+  </section>;
 }
