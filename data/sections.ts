@@ -72,4 +72,34 @@ export const categorySections: Partial<Record<CategoryId, SectionGroup[]>> = {
       ],
     },
   ],
+  laptops: [
+    {
+      id: "by-use",
+      title: "Use",
+      sections: [
+        { id: "student", title: "Students & everyday", description: "Reliable laptops for classes, browsing, documents, and streaming.", tag: "laptopUse", value: "student" },
+        { id: "work", title: "Work & productivity", description: "Comfortable machines for office work, video calls, and multitasking.", tag: "laptopUse", value: "work" },
+        { id: "gaming", title: "Gaming", description: "Laptops with a dedicated graphics card and a fast screen for games.", tag: "laptopUse", value: "gaming" },
+        { id: "creator", title: "Creative work", description: "Extra power for photo editing, video, and other creative apps.", tag: "laptopUse", value: "creator" },
+      ],
+    },
+    {
+      id: "by-budget",
+      title: "Budget",
+      sections: [
+        { id: "under-50k", title: "Under ₹50,000", description: "Solid everyday laptops at the lowest prices.", tag: "budget", value: "under-50k" },
+        { id: "50k-80k", title: "₹50,000 – ₹80,000", description: "The sweet spot: faster chips, more memory, and better screens.", tag: "budget", value: "50k-80k" },
+        { id: "80k-120k", title: "₹80,000 – ₹1,20,000", description: "Gaming laptops and premium thin-and-lights.", tag: "budget", value: "80k-120k" },
+        { id: "above-120k", title: "Above ₹1,20,000", description: "High-end performance and premium builds.", tag: "budget", value: "above-120k" },
+      ],
+    },
+    {
+      id: "by-os",
+      title: "Operating system",
+      sections: [
+        { id: "windows", title: "Windows", description: "Runs the widest range of software and games.", tag: "os", value: "windows" },
+        { id: "macos", title: "macOS", description: "Apple's MacBooks, with long battery life and a polished experience.", tag: "os", value: "macos" },
+      ],
+    },
+  ],
 };
