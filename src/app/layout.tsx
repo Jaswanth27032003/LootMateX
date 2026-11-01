@@ -44,7 +44,9 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t!==
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={figtree.variable} suppressHydrationWarning>
+    // data-scroll-behavior: Next 16 only disables the global smooth scrolling during route
+    // changes when this is set; without it, new pages could land scrolled to the bottom.
+    <html lang="en" className={figtree.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
