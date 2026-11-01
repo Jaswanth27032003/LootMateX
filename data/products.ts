@@ -60,6 +60,11 @@ export type Product = {
   benefits?: string[];
   considerations?: string[];
   merchant?: string;
+  /**
+   * Manufacturer, e.g. "Apple". When a category's products have two or more
+   * brands, its page shows brand buttons (logos come from src/lib/brand-logos.ts).
+   */
+  brand?: string;
   /** Extra local product photos; the main image is included automatically. */
   gallery?: string[];
 };
@@ -552,6 +557,7 @@ export const categories: Category[] = [
         badge: "#1 bestseller",
         bestFor: "Students and first-time Mac users",
         merchant: "Amazon",
+        brand: "Apple",
         benefits: [
           "The cheapest way into a MacBook, with a sharp 13-inch Liquid Retina display (2408 x 1506).",
           "Apple lists up to 16 hours of battery life, enough for a full day of classes or work.",
@@ -584,6 +590,7 @@ export const categories: Category[] = [
         badge: "Premium pick",
         bestFor: "Professionals who want a big screen and long battery life",
         merchant: "Amazon",
+        brand: "Apple",
         benefits: [
           "The M5 chip with 16 GB of unified memory handles multitasking, photo editing, and light video work smoothly.",
           "A 15.3-inch Liquid Retina display (2880 x 1864) gives plenty of room for side-by-side windows.",
@@ -616,6 +623,7 @@ export const categories: Category[] = [
         badge: "Top gaming bestseller",
         bestFor: "Gamers on a sensible budget",
         merchant: "Amazon",
+        brand: "ASUS",
         benefits: [
           "An 8-core Ryzen 7 8845HS with an RTX 3050 graphics card runs popular games at Full HD.",
           "The 15.6-inch Full HD screen refreshes at 144 Hz for smoother gameplay.",
@@ -648,6 +656,7 @@ export const categories: Category[] = [
         badge: "More gaming power",
         bestFor: "Gamers who want higher settings in new games",
         merchant: "Amazon",
+        brand: "HP",
         benefits: [
           "An RTX 4050 with 6 GB of graphics memory handles newer games better than an RTX 3050.",
           "A 15.6-inch 144 Hz IPS screen at 300 nits for smooth, bright gameplay.",
@@ -680,6 +689,7 @@ export const categories: Category[] = [
         badge: "Most reviewed",
         bestFor: "Office work and everyday multitasking",
         merchant: "Amazon",
+        brand: "Dell",
         benefits: [
           "16 GB of memory and a roomy 1 TB SSD for documents, photos, and many apps at once.",
           "A 15.6-inch Full HD screen at 120 Hz makes scrolling feel smoother.",
@@ -712,6 +722,7 @@ export const categories: Category[] = [
         badge: "Battery champion",
         bestFor: "Working on the go without a charger",
         merchant: "Amazon",
+        brand: "HP",
         benefits: [
           "HP lists up to 34 hours of battery life — the longest in this collection.",
           "A 14-inch OLED screen gives deep blacks and vivid colour, in a 1.29 kg body.",
@@ -744,6 +755,7 @@ export const categories: Category[] = [
         badge: "Best value",
         bestFor: "Students who want speed without overspending",
         merchant: "Amazon",
+        brand: "Acer",
         benefits: [
           "An 8-core Ryzen 7 7730U with 16 GB of memory handles multitasking well for the price.",
           "A 15.6-inch Full HD IPS screen for comfortable study and streaming.",
@@ -776,6 +788,7 @@ export const categories: Category[] = [
         badge: "Fan favourite",
         bestFor: "Everyday work with a premium metal build",
         merchant: "Flipkart",
+        brand: "Samsung",
         benefits: [
           "Over 21,000 ratings on Flipkart with a 4.4-star average — a proven, popular choice.",
           "A 15.6-inch Full HD screen with 16 GB of memory and a 512 GB SSD.",
@@ -794,7 +807,7 @@ export const categories: Category[] = [
           { label: "Weight", value: "1.55 kg" },
           { label: "Best For", value: "Work & study" },
         ],
-        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        affiliateUrl: "https://fktr.in/APdsJAn",
         rel: "nofollow sponsored noopener",
         tags: { laptopUse: ["work", "student"], budget: "50k-80k", os: "windows" },
       },
@@ -808,6 +821,7 @@ export const categories: Category[] = [
         badge: "Budget pick",
         bestFor: "Students on a tight budget",
         merchant: "Flipkart",
+        brand: "Acer",
         benefits: [
           "The most affordable laptop here, with a 512 GB SSD for fast start-up and plenty of space.",
           "A compact 14-inch Full HD screen at 1.45 kg — easy to carry to class.",
@@ -826,7 +840,7 @@ export const categories: Category[] = [
           { label: "Weight", value: "1.45 kg" },
           { label: "Best For", value: "Students & basics" },
         ],
-        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        affiliateUrl: "https://fktr.in/1CIFk2D",
         rel: "nofollow sponsored noopener",
         tags: { laptopUse: "student", budget: "under-50k", os: "windows" },
       },
@@ -840,6 +854,7 @@ export const categories: Category[] = [
         badge: "OLED for less",
         bestFor: "Streaming and work on a beautiful screen",
         merchant: "Flipkart",
+        brand: "Motorola",
         benefits: [
           "A 14-inch WUXGA (1920 x 1200) OLED screen gives deep blacks and rich colour.",
           "A full-metal body at 1.39 kg, with 16 GB of memory and a 512 GB SSD.",
@@ -858,7 +873,7 @@ export const categories: Category[] = [
           { label: "Weight", value: "1.39 kg" },
           { label: "Best For", value: "Work & streaming" },
         ],
-        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        affiliateUrl: "https://fktr.in/HdY0DqQ",
         rel: "nofollow sponsored noopener",
         tags: { laptopUse: ["work", "student"], budget: "50k-80k", os: "windows" },
       },

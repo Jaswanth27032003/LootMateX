@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { SectionGroup } from "@/data/sections";
 import type { CatalogCategory } from "@/lib/catalog";
 import { hasTag, matchesQuery, queryTerms } from "@/lib/search";
+import { BrandFilter } from "./BrandFilter";
 import { useCatalog } from "./CatalogProvider";
 import { CatalogToolbar, sortProducts, type CatalogSort } from "./CatalogToolbar";
 import { ProductGrid } from "./ProductGrid";
@@ -15,18 +16,23 @@ export function CategoryPage({ category, groups = [] }: Props) {
   const { query, setQuery } = useCatalog();
   const [sort, setSort] = useState<CatalogSort>("recommended");
   const [facets, setFacets] = useState<Record<string, string>>({});
+  const [brand, setBrand] = useState(""); // "" = all brands
   const terms = queryTerms(query);
   const availableGroups = groups.map((group) => ({
     ...group,
     sections: group.sections.filter((section) => category.products.some((product) => hasTag(product, section.tag, section.value))),
   })).filter((group) => group.sections.length > 0);
+  const brandCounts = new Map<string, number>();
+  for (const p of category.products) if (p.brand) brandCounts.set(p.brand, (brandCounts.get(p.brand) ?? 0) + 1);
+  const brands = [...brandCounts].map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
   const selectedSections = availableGroups.flatMap((group) => group.sections.filter((section) => section.id === facets[`${category.id}:${group.id}`]));
-  const products = sortProducts(category.products.filter((product) => matchesQuery(product, terms, category.name) && selectedSections.every((section) => hasTag(product, section.tag, section.value))), sort);
-  const hasFilters = Boolean(query.trim()) || selectedSections.length > 0 || sort !== "recommended";
+  const products = sortProducts(category.products.filter((product) => matchesQuery(product, terms, category.name) && (!brand || product.brand === brand) && selectedSections.every((section) => hasTag(product, section.tag, section.value))), sort);
+  const hasFilters = Boolean(query.trim()) || Boolean(brand) || selectedSections.length > 0 || sort !== "recommended";
 
   function clearFilters() {
     setQuery("");
     setFacets({});
+    setBrand("");
     setSort("recommended");
   }
 
@@ -67,10 +73,13 @@ export function CategoryPage({ category, groups = [] }: Props) {
             </div>
           )}
 
+          {brands.length > 1 && <BrandFilter brands={brands} selected={brand} onSelect={setBrand} />}
+
           <CatalogToolbar count={products.length} sort={sort} onSortChange={setSort} hasFilters={hasFilters} onClear={clearFilters} placeholder={`Search ${category.name.toLowerCase()}, brands or specs…`} />
 
-          {selectedSections.length > 0 && (
+          {(selectedSections.length > 0 || brand) && (
             <div className="mt-5 flex flex-wrap gap-2" aria-label="Active filters">
+              {brand && <span className="rounded-full bg-accent/8 px-3 py-1.5 text-xs font-medium text-accent">{brand}</span>}
               {selectedSections.map((section) => <span key={section.id} className="rounded-full bg-accent/8 px-3 py-1.5 text-xs font-medium text-accent">{section.title}</span>)}
             </div>
           )}
