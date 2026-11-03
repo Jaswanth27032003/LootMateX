@@ -925,7 +925,7 @@ export const categories: Category[] = [
           { label: "Upscaling", value: "NVIDIA DLSS" },
           { label: "Card Maker", value: "Gigabyte" },
         ],
-        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        affiliateUrl: "https://fktr.in/tnN2UTe",
         rel: "nofollow sponsored noopener",
         tags: { gpuResolution: "1080p", budget: "under-50k", vram: "6-8gb" },
       },
@@ -1024,7 +1024,7 @@ export const categories: Category[] = [
           { label: "Upscaling", value: "NVIDIA DLSS 4" },
           { label: "Card Maker", value: "ASUS" },
         ],
-        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        affiliateUrl: "https://fktr.in/zvUhwc5",
         rel: "nofollow sponsored noopener",
         tags: { gpuResolution: "1080p", budget: "50k-100k", vram: "6-8gb" },
       },
@@ -1057,7 +1057,7 @@ export const categories: Category[] = [
           { label: "Upscaling", value: "NVIDIA DLSS" },
           { label: "Card Maker", value: "ZOTAC" },
         ],
-        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        affiliateUrl: "https://fktr.in/IC4G4j3",
         rel: "nofollow sponsored noopener",
         tags: { gpuResolution: "1080p", budget: "50k-100k", vram: "10-12gb" },
       },
