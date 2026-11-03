@@ -1,4 +1,4 @@
-import { siAcer, siApple, siAsus, siDell, siHp, siMotorola, siSamsung, type SimpleIcon } from "simple-icons";
+import { siAcer, siAmd, siApple, siAsus, siDell, siHp, siIntel, siMotorola, siNvidia, siSamsung, type SimpleIcon } from "simple-icons";
 
 export type BrandLogo = {
   path: string;
@@ -19,11 +19,14 @@ const icon = (si: SimpleIcon, viewBox = "0 0 24 24", wordmark = false): BrandLog
  */
 const logos: Record<string, BrandLogo> = {
   Acer: icon(siAcer, "0 9.11 24 5.78", true),
+  AMD: icon(siAmd, "0 9.14 24 5.73", true),
   Apple: icon(siApple, "2.22 0 19.55 24"),
   ASUS: icon(siAsus, "0 9.52 24 4.96", true),
   Dell: icon(siDell),
   HP: icon(siHp),
+  Intel: icon(siIntel, "0 7.34 24 9.31", true),
   Motorola: icon(siMotorola),
+  NVIDIA: icon(siNvidia, "0 4.06 24 15.87"),
   Samsung: icon(siSamsung, "0 10.17 24 3.67", true),
 };
 

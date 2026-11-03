@@ -30,6 +30,7 @@ export type MonitorForm = "flat" | "curved" | "ultrawide" | "super-ultrawide";
  * e.g. ["curved", "ultrawide"] — so it appears in each section without being duplicated.
  */
 export type LaptopUse = "student" | "work" | "gaming" | "creator";
+export type GpuResolution = "1080p" | "1440p" | "4k";
 
 export type ProductTags = {
   // Monitors
@@ -39,8 +40,11 @@ export type ProductTags = {
   refreshTier?: "60hz" | "75-100hz" | "120-165hz" | "180-240hz" | "360hz-plus";
   // Laptops
   laptopUse?: LaptopUse | LaptopUse[];
-  budget?: "under-50k" | "50k-80k" | "80k-120k" | "above-120k";
+  budget?: "under-50k" | "50k-80k" | "80k-120k" | "above-120k" | "50k-100k" | "100k-200k" | "above-200k";
   os?: "windows" | "macos";
+  // GPUs
+  gpuResolution?: GpuResolution | GpuResolution[];
+  vram?: "6-8gb" | "10-12gb" | "16gb-plus";
 };
 
 export type Product = {
@@ -61,7 +65,8 @@ export type Product = {
   considerations?: string[];
   merchant?: string;
   /**
-   * Manufacturer, e.g. "Apple". When a category's products have two or more
+   * Manufacturer, e.g. "Apple" (for GPUs, the chip maker: "NVIDIA", "AMD" or
+   * "Intel"; the card maker goes in keySpecs). When a category's products have two or more
    * brands, its page shows brand buttons (logos come from src/lib/brand-logos.ts).
    */
   brand?: string;
@@ -74,6 +79,8 @@ export type Category = {
   id: CategoryId;
   name: string;
   description: string;
+  /** Optional message box shown at the top of the category page. */
+  notice?: { eyebrow?: string; title: string; body: string };
   products: Product[];
 };
 
@@ -883,40 +890,341 @@ export const categories: Category[] = [
     id: "gpus",
     name: "GPUs",
     description: "More frames, less waiting.",
+    notice: {
+      eyebrow: "A quick reality check",
+      title: "GPU prices are sky-high. Our picks are worth every rupee.",
+      body: "Graphics cards cost far more than they used to, so every card here had to earn its spot: well-reviewed, in stock when we checked, and matched to the resolution you actually play at. Pick 1080p, 1440p or 4K below first — it's the quickest way to stop overspending.",
+    },
     products: [
       {
-        id: "placeholder-gpu-1", // PLACEHOLDER — replace
+        id: "gigabyte-rtx-3050-windforce-oc",
         category: "gpus",
-        name: "Placeholder GPU One",
-        shortDescription: "Dummy entry — replace with a real graphics card.",
-        price: "₹00,000",
-        image: "/images/gpus/placeholder-gpu-1.jpg",
-        keySpecs: [
-          { label: "Video Memory", value: "12 GB" },
-          { label: "Good For", value: "1440p gaming" },
-          { label: "Power Supply Needed", value: "650 W" },
-          { label: "Best For", value: "Gaming" },
+        name: "Gigabyte GeForce RTX 3050 Windforce OC 6GB",
+        shortDescription: "The cheapest real gaming card here — a big step up from a PC with no graphics card.",
+        price: "₹31,974",
+        image: "/images/gpus/gigabyte-rtx-3050-windforce-oc.jpg",
+        badge: "Entry-level pick",
+        bestFor: "Esports and older games at 1080p",
+        merchant: "Flipkart",
+        brand: "NVIDIA",
+        benefits: [
+          "The lowest-priced card in this collection that's built for gaming, not just display output.",
+          "NVIDIA's DLSS upscaling helps supported games run faster.",
+          "A Flipkart's Choice listing rated 4.3 stars.",
         ],
-        affiliateUrl: "https://example.com",
+        considerations: [
+          "6 GB of video memory is limited; newer games may need lower settings.",
+          "It's an older-generation card — the RTX 5060 is much faster for about ₹20,000 more.",
+          "Check your power supply and that the card fits your case before buying.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "GeForce RTX 3050" },
+          { label: "Video Memory", value: "6 GB GDDR6" },
+          { label: "Best For", value: "1080p, lighter games" },
+          { label: "Memory Bus", value: "96-bit" },
+          { label: "Upscaling", value: "NVIDIA DLSS" },
+          { label: "Card Maker", value: "Gigabyte" },
+        ],
+        affiliateUrl: "https://example.com", // TODO: EarnKaro link
         rel: "nofollow sponsored noopener",
-        tags: {},
+        tags: { gpuResolution: "1080p", budget: "under-50k", vram: "6-8gb" },
       },
       {
-        id: "placeholder-gpu-2", // PLACEHOLDER — replace
+        id: "gigabyte-rx-7600-gaming-oc",
         category: "gpus",
-        name: "Placeholder GPU Two",
-        shortDescription: "Dummy entry — replace with a real graphics card.",
-        price: "₹00,000",
-        image: "/images/gpus/placeholder-gpu-2.jpg",
-        keySpecs: [
-          { label: "Video Memory", value: "8 GB" },
-          { label: "Good For", value: "1080p gaming" },
-          { label: "Power Supply Needed", value: "550 W" },
-          { label: "Best For", value: "Budget builds" },
+        name: "Gigabyte Radeon RX 7600 Gaming OC 8GB",
+        shortDescription: "A popular, well-reviewed AMD card for smooth 1080p gaming without overspending.",
+        price: "₹44,875",
+        image: "/images/gpus/gigabyte-rx-7600-gaming-oc.jpg",
+        badge: "Best value 1080p",
+        bestFor: "1080p gaming on a budget",
+        merchant: "Amazon",
+        brand: "AMD",
+        benefits: [
+          "Rated 4.6 stars from nearly 700 buyers on Amazon.",
+          "8 GB of GDDR6 memory handles most current games at 1080p.",
+          "A triple-fan WINDFORCE cooler keeps it cool and quiet.",
         ],
-        affiliateUrl: "https://example.com",
+        considerations: [
+          "8 GB can limit texture settings in the newest games.",
+          "Stock was very low when we checked, and it was sold by a third-party seller — check the delivery date.",
+          "Check your power supply and case length before buying.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "Radeon RX 7600" },
+          { label: "Video Memory", value: "8 GB GDDR6" },
+          { label: "Best For", value: "1080p gaming" },
+          { label: "Memory Bus", value: "128-bit" },
+          { label: "Upscaling", value: "AMD FSR" },
+          { label: "Card Maker", value: "Gigabyte" },
+        ],
+        affiliateUrl: "https://link.amazon/B03Ic5mVF",
         rel: "nofollow sponsored noopener",
-        tags: {},
+        tags: { gpuResolution: "1080p", budget: "under-50k", vram: "6-8gb" },
+      },
+      {
+        id: "asrock-arc-b570-challenger",
+        category: "gpus",
+        name: "ASRock Intel Arc B570 Challenger 10GB OC",
+        shortDescription: "Intel's budget gaming card, with more video memory than most cards at its price.",
+        price: "₹49,121",
+        image: "/images/gpus/asrock-arc-b570-challenger.jpg",
+        badge: "Intel option",
+        bestFor: "1080p gaming with extra memory",
+        merchant: "Amazon",
+        brand: "Intel",
+        benefits: [
+          "10 GB of GDDR6 memory — more than the 8 GB cards around its price.",
+          "Intel's XeSS 2 upscaling helps supported games run faster.",
+          "Rated 4.7 stars on Amazon, with quiet 0 dB fan-stop cooling.",
+        ],
+        considerations: [
+          "Intel cards perform best with Resizable BAR turned on, which needs a fairly recent motherboard.",
+          "Sold by a third-party seller with a longer delivery window when we checked.",
+          "At this price, compare it with the RTX 5060 and RX 7600 before deciding.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "Intel Arc B570" },
+          { label: "Video Memory", value: "10 GB GDDR6" },
+          { label: "Best For", value: "1080p gaming" },
+          { label: "Memory Bus", value: "160-bit" },
+          { label: "Upscaling", value: "Intel XeSS 2" },
+          { label: "Card Maker", value: "ASRock" },
+        ],
+        affiliateUrl: "https://link.amazon/B06HwemaW",
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: "1080p", budget: "under-50k", vram: "10-12gb" },
+      },
+      {
+        id: "asus-dual-rtx-5060-evo",
+        category: "gpus",
+        name: "ASUS Dual GeForce RTX 5060 EVO OC 8GB",
+        shortDescription: "NVIDIA's newest mainstream card — fast 1080p gaming with DLSS 4 support.",
+        price: "₹51,999",
+        image: "/images/gpus/asus-dual-rtx-5060-evo.jpg",
+        badge: "Best 1080p all-rounder",
+        bestFor: "High-settings 1080p gaming",
+        merchant: "Flipkart",
+        brand: "NVIDIA",
+        benefits: [
+          "A current-generation RTX 50 card with fast GDDR7 memory.",
+          "DLSS 4 upscaling and frame generation boost frame rates in supported games.",
+          "The lowest price for an RTX 5060 we found across Amazon and Flipkart.",
+        ],
+        considerations: [
+          "8 GB of memory may limit texture settings in some new games.",
+          "Very few buyer reviews on this Flipkart listing so far.",
+          "Check your power supply and case length before buying.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "GeForce RTX 5060" },
+          { label: "Video Memory", value: "8 GB GDDR7" },
+          { label: "Best For", value: "1080p gaming" },
+          { label: "Memory Bus", value: "128-bit" },
+          { label: "Upscaling", value: "NVIDIA DLSS 4" },
+          { label: "Card Maker", value: "ASUS" },
+        ],
+        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: "1080p", budget: "50k-100k", vram: "6-8gb" },
+      },
+      {
+        id: "zotac-rtx-3060-twin-edge-12gb",
+        category: "gpus",
+        name: "ZOTAC GeForce RTX 3060 Twin Edge 12GB",
+        shortDescription: "A long-time favourite with a generous 12GB of video memory for games and creative apps.",
+        price: "₹54,999",
+        image: "/images/gpus/zotac-rtx-3060-twin-edge-12gb.jpg",
+        badge: "Most memory for less",
+        bestFor: "1080p gaming plus video editing",
+        merchant: "Flipkart",
+        brand: "NVIDIA",
+        benefits: [
+          "12 GB of video memory gives more headroom for high textures and creative apps.",
+          "A compact dual-fan Twin Edge design fits most cases.",
+          "NVIDIA DLSS upscaling is supported in many games.",
+        ],
+        considerations: [
+          "It's an older generation; the RTX 5060 is usually faster in games for a similar price.",
+          "Pick this mainly if you value the extra memory for editing or AI tools.",
+          "Check your power supply before buying.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "GeForce RTX 3060" },
+          { label: "Video Memory", value: "12 GB GDDR6" },
+          { label: "Best For", value: "1080p & creative apps" },
+          { label: "Memory Bus", value: "192-bit" },
+          { label: "Upscaling", value: "NVIDIA DLSS" },
+          { label: "Card Maker", value: "ZOTAC" },
+        ],
+        affiliateUrl: "https://example.com", // TODO: EarnKaro link
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: "1080p", budget: "50k-100k", vram: "10-12gb" },
+      },
+      {
+        id: "asus-prime-rx-9060-xt-16gb",
+        category: "gpus",
+        name: "ASUS Prime Radeon RX 9060 XT 16GB OC",
+        shortDescription: "AMD's new mid-range card with a big 16GB of memory — ready for 1080p and 1440p.",
+        price: "₹89,499",
+        image: "/images/gpus/asus-prime-rx-9060-xt-16gb.jpg",
+        badge: "16GB for less",
+        bestFor: "1440p gaming that lasts",
+        merchant: "Amazon",
+        brand: "AMD",
+        benefits: [
+          "16 GB of video memory — the most you'll find below ₹1 lakh here.",
+          "A current-generation AMD card with PCIe 5.0 and HDMI/DisplayPort 2.1.",
+          "Rated 4.7 stars on Amazon, with a dual-BIOS switch for quiet or performance modes.",
+        ],
+        considerations: [
+          "Indian prices are well above launch pricing right now.",
+          "It's a 2.5-slot card — check that your case has room.",
+          "Check your power supply before buying.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "Radeon RX 9060 XT" },
+          { label: "Video Memory", value: "16 GB GDDR6" },
+          { label: "Best For", value: "1080p & 1440p" },
+          { label: "Interface", value: "PCIe 5.0" },
+          { label: "Upscaling", value: "AMD FSR" },
+          { label: "Card Maker", value: "ASUS" },
+        ],
+        affiliateUrl: "https://link.amazon/B0j7YNNU0",
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: ["1080p", "1440p"], budget: "50k-100k", vram: "16gb-plus" },
+      },
+      {
+        id: "asus-dual-rtx-5070-12gb",
+        category: "gpus",
+        name: "ASUS Dual GeForce RTX 5070 12GB OC",
+        shortDescription: "The sweet spot for high-refresh 1440p gaming, with DLSS 4 in a compact dual-fan card.",
+        price: "₹1,09,999",
+        image: "/images/gpus/asus-dual-rtx-5070-12gb.jpg",
+        badge: "Best 1440p pick",
+        bestFor: "Smooth 1440p gaming",
+        merchant: "Amazon",
+        brand: "NVIDIA",
+        benefits: [
+          "A big jump in speed over the 1080p cards, aimed at 1440p gaming.",
+          "12 GB of fast GDDR7 memory and DLSS 4 with frame generation.",
+          "A compact dual-fan design with 0 dB fan-stop, rated 4.8 stars on Amazon.",
+        ],
+        considerations: [
+          "12 GB is fine for 1440p but can feel tight at 4K in the newest games.",
+          "The RX 9070 XT has 16 GB for about ₹10,000 more.",
+          "Check your power supply before buying.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "GeForce RTX 5070" },
+          { label: "Video Memory", value: "12 GB GDDR7" },
+          { label: "Best For", value: "1440p gaming" },
+          { label: "Interface", value: "PCIe 5.0" },
+          { label: "Upscaling", value: "NVIDIA DLSS 4" },
+          { label: "Card Maker", value: "ASUS" },
+        ],
+        affiliateUrl: "https://link.amazon/B03QmGxg7",
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: "1440p", budget: "100k-200k", vram: "10-12gb" },
+      },
+      {
+        id: "asus-prime-rx-9070-xt-16gb",
+        category: "gpus",
+        name: "ASUS Prime Radeon RX 9070 XT 16GB OC",
+        shortDescription: "AMD's fastest card here — 16GB of memory for high-settings 1440p and entry 4K.",
+        price: "₹1,19,900",
+        image: "/images/gpus/asus-prime-rx-9070-xt-16gb.jpg",
+        badge: "AMD's best",
+        bestFor: "High-settings 1440p and 4K",
+        merchant: "Amazon",
+        brand: "AMD",
+        benefits: [
+          "16 GB of video memory for high textures at 1440p and 4K.",
+          "AI-powered upscaling and frame generation in supported games.",
+          "Rated 4.6 stars from over 650 buyers on Amazon.",
+        ],
+        considerations: [
+          "Stock was low when we checked — check availability before planning a build.",
+          "A large, power-hungry card; check your case length and power supply.",
+          "Ray-tracing-heavy games often favour NVIDIA cards.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "Radeon RX 9070 XT" },
+          { label: "Video Memory", value: "16 GB GDDR6" },
+          { label: "Best For", value: "1440p & 4K" },
+          { label: "Interface", value: "PCIe 5.0" },
+          { label: "Upscaling", value: "AMD FSR" },
+          { label: "Card Maker", value: "ASUS" },
+        ],
+        affiliateUrl: "https://link.amazon/B01njYPXQ",
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: ["1440p", "4k"], budget: "100k-200k", vram: "16gb-plus" },
+      },
+      {
+        id: "msi-rtx-5070-ti-ventus-3x",
+        category: "gpus",
+        name: "MSI GeForce RTX 5070 Ti Ventus 3X OC 16GB",
+        shortDescription: "Serious 4K-capable power with 16GB of fast GDDR7 and a triple-fan cooler.",
+        price: "₹1,73,295",
+        image: "/images/gpus/msi-rtx-5070-ti-ventus-3x.jpg",
+        badge: "4K-ready",
+        bestFor: "High-refresh 1440p and 4K gaming",
+        merchant: "Amazon",
+        brand: "NVIDIA",
+        benefits: [
+          "16 GB of GDDR7 on a 256-bit bus for high resolutions and textures.",
+          "DLSS 4 with frame generation for high frame rates at 4K in supported games.",
+          "A triple-fan TORX 5.0 cooler, rated 4.6 stars from nearly 400 buyers.",
+        ],
+        considerations: [
+          "A big investment — the RTX 5070 handles 1440p for much less.",
+          "Stock was very low when we checked.",
+          "Needs a strong power supply and a roomy case.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "GeForce RTX 5070 Ti" },
+          { label: "Video Memory", value: "16 GB GDDR7" },
+          { label: "Best For", value: "1440p & 4K" },
+          { label: "Memory Bus", value: "256-bit" },
+          { label: "Upscaling", value: "NVIDIA DLSS 4" },
+          { label: "Card Maker", value: "MSI" },
+        ],
+        affiliateUrl: "https://link.amazon/B02YaiIQ3",
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: ["1440p", "4k"], budget: "100k-200k", vram: "16gb-plus" },
+      },
+      {
+        id: "asus-prime-rtx-5080-evo",
+        category: "gpus",
+        name: "ASUS Prime GeForce RTX 5080 EVO 16GB",
+        shortDescription: "The fastest card in this collection — for 4K gaming with every setting turned up.",
+        price: "₹3,00,000",
+        image: "/images/gpus/asus-prime-rtx-5080-evo.jpg",
+        badge: "Flagship",
+        bestFor: "No-compromise 4K gaming",
+        merchant: "Amazon",
+        brand: "NVIDIA",
+        benefits: [
+          "The most powerful GPU here, with 10,752 CUDA cores and 16 GB of GDDR7.",
+          "DLSS 4 with frame generation for very high frame rates at 4K.",
+          "A triple-fan, SFF-ready design with a 3-year warranty listed.",
+        ],
+        considerations: [
+          "Priced far above its launch price — the RTX 5070 Ti gets close for much less.",
+          "Needs a high-wattage power supply and a capable CPU to make the most of it.",
+          "Only worth it if you game at 4K or high-refresh 1440p.",
+        ],
+        keySpecs: [
+          { label: "GPU", value: "GeForce RTX 5080" },
+          { label: "Video Memory", value: "16 GB GDDR7" },
+          { label: "Best For", value: "4K gaming" },
+          { label: "CUDA Cores", value: "10,752" },
+          { label: "Upscaling", value: "NVIDIA DLSS 4" },
+          { label: "Card Maker", value: "ASUS" },
+        ],
+        affiliateUrl: "https://link.amazon/B0gvPoM8t",
+        rel: "nofollow sponsored noopener",
+        tags: { gpuResolution: "4k", budget: "above-200k", vram: "16gb-plus" },
       },
     ],
   },

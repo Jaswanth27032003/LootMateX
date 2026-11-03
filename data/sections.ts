@@ -102,4 +102,34 @@ export const categorySections: Partial<Record<CategoryId, SectionGroup[]>> = {
       ],
     },
   ],
+  gpus: [
+    {
+      id: "by-resolution",
+      title: "Resolution",
+      sections: [
+        { id: "1080p", title: "1080p (Full HD)", description: "The most common gaming resolution — the best value for most players.", tag: "gpuResolution", value: "1080p" },
+        { id: "1440p", title: "1440p (QHD)", description: "Sharper than 1080p — the sweet spot for 27-inch gaming monitors.", tag: "gpuResolution", value: "1440p" },
+        { id: "4k", title: "4K (Ultra HD)", description: "The sharpest gaming — needs the most powerful cards.", tag: "gpuResolution", value: "4k" },
+      ],
+    },
+    {
+      id: "by-budget",
+      title: "Budget",
+      sections: [
+        { id: "under-50k", title: "Under ₹50,000", description: "Entry-level and 1080p cards.", tag: "budget", value: "under-50k" },
+        { id: "50k-100k", title: "₹50,000 – ₹1,00,000", description: "Current-gen 1080p and entry 1440p cards.", tag: "budget", value: "50k-100k" },
+        { id: "100k-200k", title: "₹1,00,000 – ₹2,00,000", description: "High-end 1440p and 4K-capable cards.", tag: "budget", value: "100k-200k" },
+        { id: "above-200k", title: "Above ₹2,00,000", description: "Flagship cards for no-compromise 4K.", tag: "budget", value: "above-200k" },
+      ],
+    },
+    {
+      id: "by-vram",
+      title: "Video memory",
+      sections: [
+        { id: "6-8gb", title: "6 – 8 GB", description: "Fine for 1080p; may limit textures in the newest games.", tag: "vram", value: "6-8gb" },
+        { id: "10-12gb", title: "10 – 12 GB", description: "Comfortable headroom for 1080p and 1440p.", tag: "vram", value: "10-12gb" },
+        { id: "16gb-plus", title: "16 GB or more", description: "Room for high textures, 4K, and creative apps.", tag: "vram", value: "16gb-plus" },
+      ],
+    },
+  ],
 };
